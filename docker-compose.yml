@@ -1,8 +1,13 @@
+networks:
+  manifold:
+    name: manifold
 services:
   #proxy - Traefik
   proxy:
     container_name: proxy
     image: traefik:v3.1.6
+    networks:
+      - manifold
     command:
       ##- --api.insecure=true
       - --api.insecure=false #you need to be validated
@@ -33,6 +38,8 @@ services:
   #mariadb
   mariadb:
     image: mariadb:latest
+    networks:
+      - manifold
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "manifold"
@@ -42,6 +49,9 @@ services:
     #  - "3306:3306"
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=manifold"
+      - "traefik.tcp.routers.mariadb.entrypoints=mariadb"
+      - "traefik.tcp.routers.mariadb.rule=HostSNI(`*`)"
   #processmaker
   whoami:
     image: containous/whoami:latest
