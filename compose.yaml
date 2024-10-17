@@ -1,0 +1,17 @@
+services:
+  #proxy - Traefik
+  proxy:
+    container_name: Traefik
+    image: traefik:v3.20.3
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  #redis
+  #mariadb
+  #processmaker
