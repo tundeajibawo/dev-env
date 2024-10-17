@@ -129,9 +129,9 @@ services:
       WAIT_FOR_DEPENDENTS: 1
       DOCKER_HOST: "tcp://docker:2375"
       NO_PROXY: "127.0.0.1,localhost,docker:2375"
-    labels:
-      - "traefik.enable=true"
-      - traefik.http.routers.processmaker.rule=PathPrefix(`/processmaker`)
+    #labels:
+    #- "traefik.enable=true"
+    # - traefik.http.routers.processmaker.rule=PathPrefix(`/processmaker`)
   #whoami:
   #  image: containous/whoami:latest
   #  restart: unless-stopped
