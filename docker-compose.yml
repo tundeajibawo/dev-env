@@ -1,18 +1,45 @@
 services:
   #proxy - Traefik
   proxy:
-    container_name: Traefik
+    container_name: proxy
     image: traefik:v3.1.6
-    command: --api.insecure=true --providers.docker
+    command:
+      ##- --api.insecure=true
+      - --api.insecure=false #you need to be validated
+      - --api.dashboard=true
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false #not discoverying ALL docker services automatically
     ports:
       # The HTTP port
       - "${TRAEFIK_PORT}:80"
       # The Web UI (enabled by --api.insecure=true)
-      - "${TRAEFIK_ADMIN_PORT}:8080"
+      #- "${TRAEFIK_ADMIN_PORT}:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/credentials.txt:/credentials.txt:ro
+    labels:
+      - "traefik.enable=true"
+      #- "traefik.http.routers.proxy.rule=Host(`traefik-trial-67.localcan.dev`)"
+      #- "traefik.http.routers.proxy.rule=Path('/dashboard')"
+      - "traefik.http.routers.proxy.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.proxy.service=api@internal"
+      - "traefik.http.routers.proxy.middlewares=auth"
+      # always escape $ by adding a second one: $$
+      #- "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$udogt.Uv$$a9wCcl0iSacEQ.z3fy447/"
+      # - "traefik.http.routers.router1.middlewares=foobar, foobar"
+      # - "traefik.http.middlewares.middleware02.basicauth.usersfile=foobar"
+      #- "traefik.http.middlewares.auth.basicauth.users=admin:$apr1$udogt.Uv$a9wCcl0iSacEQ.z3fy447/"
+      - "traefik.http.middlewares.auth.basicauth.usersfile=/credentials.txt"
     #env_file: ".env"
   #redis
   #mariadb
   #processmaker
+  whoami:
+    image: containous/whoami:latest
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    labels:
+      - traefik.enable=true
+      #- traefik.http.routers.whoami.rule=Host(`traefik-trial-67.localcan.dev/whoami`)
