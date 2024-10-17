@@ -10,6 +10,8 @@ services:
       - manifold
     command:
       ##- --api.insecure=true
+      - --accesslog
+      - --log
       - --api.insecure=false #you need to be validated
       - --api.dashboard=true
       - --providers.docker
@@ -50,6 +52,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=manifold"
+      - "traefik.tcp.routers.mysql.entrypoints=mariadb"
       - "traefik.tcp.routers.mariadb.entrypoints=mariadb"
       - "traefik.tcp.routers.mariadb.rule=HostSNI(`*`)"
   #processmaker
