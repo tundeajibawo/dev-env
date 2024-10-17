@@ -38,5 +38,5 @@ services:
     ports:
       - 8000:80
     labels:
-      - traefik.enable=true
+      - traefik.enable=false
       - traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)
