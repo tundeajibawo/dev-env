@@ -31,6 +31,17 @@ services:
     #env_file: ".env"
   #redis
   #mariadb
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "${}"
+      MYSQL_USER: "manifold"
+      MYSQL_PASSWORD: "${}"
+      MYSQL_DATABASE: "${}"
+    ports:
+      - "3306:3306"
+    labels:
+      - "traefik.enable=false"
   #processmaker
   whoami:
     image: containous/whoami:latest
