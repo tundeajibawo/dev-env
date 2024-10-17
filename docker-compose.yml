@@ -52,10 +52,10 @@ services:
     ports:
       - "3306"
     labels:
-      - "traefik.enable=true"
+      #- "traefik.enable=true"
       #- "traefik.docker.network=manifold"
-      - "traefik.tcp.routers.mariadb-router.entrypoints=mariadb" # Use the mariadb entry point
-      - "traefik.tcp.routers.mariadb-router.rule=HostSNI(`*`)" # SNI rule for TCP (HostSNI is needed for TCP)
+      #- "traefik.tcp.routers.mariadb-router.entrypoints=mariadb" # Use the mariadb entry point
+      #- "traefik.tcp.routers.mariadb-router.rule=HostSNI(`*`)" # SNI rule for TCP (HostSNI is needed for TCP)
       #- "traefik.tcp.routers.mariadb-router.service=mariadb-service"
       #- "traefik.tcp.services.mariadb-service.loadbalancer.server.port=3306"
 
