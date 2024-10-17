@@ -26,10 +26,7 @@ services:
       - "traefik.http.routers.proxy.service=api@internal"
       - "traefik.http.routers.proxy.middlewares=auth"
       # always escape $ by adding a second one: $$
-      #- "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$udogt.Uv$$a9wCcl0iSacEQ.z3fy447/"
-      # - "traefik.http.routers.router1.middlewares=foobar, foobar"
-      # - "traefik.http.middlewares.middleware02.basicauth.usersfile=foobar"
-      #- "traefik.http.middlewares.auth.basicauth.users=admin:$apr1$udogt.Uv$a9wCcl0iSacEQ.z3fy447/"
+      #- "traefik.http.middlewares.auth.basicauth.users=USERNAME:PASSWORD"
       - "traefik.http.middlewares.auth.basicauth.usersfile=/credentials.txt"
     #env_file: ".env"
   #redis
