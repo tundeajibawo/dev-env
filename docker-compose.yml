@@ -39,4 +39,4 @@ services:
       - 8000:80
     labels:
       - traefik.enable=true
-      #- traefik.http.routers.whoami.rule=Host(`traefik-trial-67.localcan.dev/whoami`)
+      - traefik.http.routers.whoami.rule=PathPrefix('/whoami')
