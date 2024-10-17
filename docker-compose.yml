@@ -112,8 +112,8 @@ services:
     #  - "80:80"
     #  - "6001:6001"
     depends_on:
-      db:
-        condition: service_healthy
+      #db:
+      #  condition: service_healthy
       redis:
         condition: service_healthy
       docker:
