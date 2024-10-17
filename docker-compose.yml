@@ -38,16 +38,16 @@ services:
       MYSQL_USER: "manifold"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
     labels:
       - "traefik.enable=false"
   #processmaker
   whoami:
     image: containous/whoami:latest
     restart: unless-stopped
-    ports:
-      - 8000:80
+    #ports:
+    #  - 8000:80
     labels:
       - traefik.enable=false
       - traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)
