@@ -1,6 +1,9 @@
 networks:
   manifold:
     name: manifold
+volumes:
+  docker-data:
+  redis-data:
 services:
   #proxy - Traefik
   proxy:
@@ -39,6 +42,21 @@ services:
       - "traefik.http.middlewares.auth.basicauth.usersfile=/credentials.txt"
     #env_file: ".env"
   #redis
+  redis:
+    image: redis:6
+    command: redis-server --save 60 1 --loglevel warning
+    ports:
+      - "6379:6379"
+    networks:
+      - manifold
+    volumes:
+      - redis-data:/data
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   #mariadb
   db:
     image: mariadb:latest
@@ -50,8 +68,12 @@ services:
       MYSQL_USER: "manifold"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
-    #ports:
-    #  - "3306"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    security_opt:
+      - seccomp:unconfined
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.tcp.routers.mysql.entrypoints=db"
@@ -64,7 +86,25 @@ services:
     #- "traefik.tcp.routers.mariadb-router.service=mariadb-service"
     #- "traefik.tcp.services.mariadb-service.loadbalancer.server.port=3306"
 
-  #processmaker
+  docker:
+    image: docker:20-dind
+    privileged: true
+    ports:
+      - "2375:2375"
+    networks:
+      - manifold
+    volumes:
+      - docker-data:/var/lib/docker
+      - ./scripts:/opt/scripts
+    environment:
+      DOCKER_DRIVER: "overlay2"
+      DOCKER_TLS_CERTDIR: ""
+    restart: always
+    healthcheck:
+      test: ["CMD", "docker", "info"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   #whoami:
   #  image: containous/whoami:latest
   #  restart: unless-stopped
