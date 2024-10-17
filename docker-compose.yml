@@ -47,14 +47,16 @@ services:
       MYSQL_USER: "manifold"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
-    #ports:
-    #  - "3306:3306"
+    ports:
+      - "3306"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=manifold"
-      #- "traefik.tcp.routers.mariadb.entrypoints=mariadb"
-      - "traefik.tcp.routers.mariadb.entrypoints=mariadb"
+      #- "traefik.docker.network=manifold"
       - "traefik.tcp.routers.mariadb.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.mariadb.entrypoints=mariadb"
+      - "traefik.tcp.services.mariadb.loadbalancer.server.tls=true"
+      - "traefik.tcp.services.mariadb.loadbalancer.server.port=3306"
+
   #processmaker
   whoami:
     image: containous/whoami:latest
