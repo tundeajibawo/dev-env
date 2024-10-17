@@ -41,7 +41,7 @@ services:
     #ports:
     #  - "3306:3306"
     labels:
-      - "traefik.enable=false"
+      - "traefik.enable=true"
   #processmaker
   whoami:
     image: containous/whoami:latest
