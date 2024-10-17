@@ -20,7 +20,6 @@ services:
     ports:
       # The HTTP port
       - "${TRAEFIK_PORT}:80"
-      - "3306:3306"
       # The Web UI (enabled by --api.insecure=true)
       #- "${TRAEFIK_ADMIN_PORT}:8080"
     volumes:
@@ -56,8 +55,8 @@ services:
       #- "traefik.docker.network=manifold"
       - "traefik.tcp.routers.mariadb-router.entrypoints=mariadb" # Use the mariadb entry point
       - "traefik.tcp.routers.mariadb-router.rule=HostSNI(`*`)" # SNI rule for TCP (HostSNI is needed for TCP)
-      - "traefik.tcp.routers.mariadb-router.service=mariadb-service"
-      - "traefik.tcp.services.mariadb-service.loadbalancer.server.port=3306"
+      #- "traefik.tcp.routers.mariadb-router.service=mariadb-service"
+      #- "traefik.tcp.services.mariadb-service.loadbalancer.server.port=3306"
 
   #processmaker
   whoami:
